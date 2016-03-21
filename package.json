@@ -15,5 +15,11 @@
   "bugs": {
     "url": "https://github.com/Hougo13/ServerPI/issues"
   },
-  "homepage": "https://github.com/Hougo13/ServerPI#readme"
+  "homepage": "https://github.com/Hougo13/ServerPI#readme",
+  "dependencies": {
+    "debug": "^2.2.0",
+    "express": "^4.13.4",
+    "nedb": "^1.8.0",
+    "socket.io": "^1.4.5"
+  }
 }
