@@ -10,22 +10,22 @@ app.get('/', function(req, res){
   res.send('Hello World !');
 });
 
-app.get('/update/soft', function(req, res){
-  res.send('ok');
-  update.soft(function () {
-    console.log('done');
-  })
-});
-
-app.get('/update/app', function(req, res){
-  res.send('ok');
-});
-
-app.get('/update/server', function(req, res){
-  res.send('ok');
-  update.server(function () {
-    console.log('done');
-    proccess.exit(0)
+app.all('/update/:key?', function(req, res, next){
+  var key = req.params.key;
+  if (key == 'server' || key == 'soft' || key == 'app') {
+    res.send('Update '+key);
+    next()
+  }else {
+    res.send('Update nothing');
+  }
+}, function (req, res) {
+  var key = req.params.key;
+  console.log('Updating '+key);
+  update(key, function () {
+    console.log('Done');
+    if (key == 'server') {
+      process.exit(0)
+    }
   })
 });
 
