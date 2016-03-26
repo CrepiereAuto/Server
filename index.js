@@ -4,27 +4,43 @@ var io = require('socket.io')(http);
 var manager = require('./lib/manager')
 var update = require('./lib/updater')
 
+var updating = {
+  server: false,
+  soft: false,
+  app: false
+}
+
 http.listen(3030, function(){console.log('Listening *:3030');});
 
 app.get('/', function(req, res){
-  res.send('Hello World !');
+  var page = 'Hello World ! <br>'
+  if(updating['server']){
+    page += '<li>Server</li>'
+  }
+  if(updating['soft']){
+    page += '<li>Soft</li>'
+  }
+  if(updating['app']){
+    page += '<li>App</li>'
+  }
+  res.send(page);
 });
 
 app.all('/update/:key?', function(req, res, next){
   var key = req.params.key;
   if (key == 'server' || key == 'soft' || key == 'app') {
-    res.send('Update '+key);
+    updating[key] = true
+    res.redirect('/')
     next()
-  }else {
-    res.send('Update nothing');
   }
 }, function (req, res) {
   var key = req.params.key;
   console.log('Updating '+key);
   update(key, function () {
-    console.log('Done');
+    updating[key] = false
+    console.log(key+' update done');
     if (key == 'server') {
-      process.exit(0)
+      restart()
     }
   })
 });
@@ -46,4 +62,17 @@ io.on('connection', function(socket){
     manager.join(socket, data)
   })
 
+  socket.on('update', function (data) {
+    manager.update(socket, data)
+  })
+
 })
+
+function restart(){
+  if (updating == {server: false, soft: false, app: false}) {
+    process.exit(0)
+  }else {
+    console.log('other update is runnig');
+    setTimeout(restart, 1000)
+  }
+}
