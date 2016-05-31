@@ -18,6 +18,7 @@
   },
   "homepage": "https://github.com/Hougo13/ServerPI#readme",
   "dependencies": {
+    "body-parser": "^1.15.1",
     "debug": "^2.2.0",
     "delete": "^0.3.0",
     "express": "^4.13.4",
@@ -35,6 +36,7 @@
     "gulp-stylus": "^2.3.1",
     "gulp-zip": "^3.2.0",
     "nedb": "^1.8.0",
-    "socket.io": "^1.4.5"
+    "socket.io": "^1.4.5",
+    "socket.io-iot-server": "git+https://github.com/Hougo13/socket.io-iot-server.git"
   }
 }
